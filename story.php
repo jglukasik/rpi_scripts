@@ -9,7 +9,7 @@ include_once '/home/pi/php-snapchat/credentials.php';
 $date = `date -I`;
 $date = chop($date);
 $pic_dir = "/home/pi/pi_sync/".$date;
-$recent_pic = `ls $pic_dir | grep jpeg | tail -1`;
+$recent_pic = `ls $pic_dir | grep jpg | tail -1`;
 $pic_path = $pic_dir."/".$recent_pic;
 $pic_path = chop($pic_path);
 
@@ -28,11 +28,10 @@ $id = $snapchat->upload(
 	file_get_contents($pic_path)
 );
 
-# TODO investigate story functionality, they cannot be viewed for some reason now
-#$snapchat->setStory($id, Snapchat::MEDIA_IMAGE, 8);
+$snapchat->setStory($id, Snapchat::MEDIA_IMAGE, 1);
 
 # For now, sends snap to all friends
-$snapchat->send($id, $friend_usernames, 10);
+#$snapchat->send($id, $friend_usernames, 2);
 
 print "Sent picture $pic_path";
 
