@@ -1,9 +1,13 @@
 #!/usr/bin/perl
 #
-# A script to return the button values for a given button on the apex remote
+# A script to give the arduino the remote code for a given remote button
+
+# TODO: only works if serial port is open in arduino IDE, check serial initialization
 
 use strict;
+use Device::SerialPort;
 
+# Button codes obtained from IRremote arduino library
 my %buttons = (
 	'power' =>	'FE50AF',
 	'display' =>	'FE9A65',
@@ -51,6 +55,19 @@ my %buttons = (
 	'ccd' =>	'FE8A75',
 );
 
+# Initialize the arduino serial port
+my $arduino = Device::SerialPort->new("/dev/ttyACM0");
+$arduino->baudrate(9600);
+$arduino->databits(8);
+$arduino->stopbits(1);
+$arduino->parity("none");
+
+# Get the remote button to press
 my $input = $ARGV[0];
 chomp($input);
-print $buttons{$input};
+
+print hex $buttons{$input};
+print "\n";
+
+# Send the corresponding button code to the arduino
+$arduino->write(hex $buttons{$input});
