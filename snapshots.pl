@@ -22,5 +22,7 @@ chomp $pic_name;
 $full_pic_name = $base_dir.$pics_path.$date.'/'.$pic_name.'.jpg';
 `ffmpeg -f video4linux2 -vframes 1 -i /dev/video0 $full_pic_name`;
 
-print "$date: Captured the picture at $pic_name\n";
-print $full_pic_name;
+if ($? eq 0){
+	print "$date: Captured the picture at $pic_name\n";
+	print $full_pic_name;
+}
